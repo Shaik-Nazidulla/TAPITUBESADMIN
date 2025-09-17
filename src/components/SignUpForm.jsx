@@ -62,7 +62,7 @@ function SignUpForm() {
       {/* Name Fields */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-white">First Name *</label>
+          <label className="block text-sm font-medium text-white">First Name <span className="text-red-500">*</span></label>
           <input
             type="text"
             name="firstName"
@@ -74,7 +74,7 @@ function SignUpForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-white">Last Name *</label>
+          <label className="block text-sm font-medium text-white">Last Name <span className="text-red-500">*</span></label>
           <input
             type="text"
             name="lastName"
@@ -88,7 +88,7 @@ function SignUpForm() {
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-medium text-white">Email Address *</label>
+        <label className="block text-sm font-medium text-white">Email Address <span className="text-red-500">*</span></label>
         <input
           type="email"
           name="email"
@@ -101,7 +101,7 @@ function SignUpForm() {
 
       {/* Phone */}
       <div>
-        <label className="block text-sm font-medium text-white">Phone Number *</label>
+        <label className="block text-sm font-medium text-white">Phone Number <span className="text-red-500">*</span></label>
         <input
           type="tel"
           name="phone"
@@ -114,7 +114,7 @@ function SignUpForm() {
 
       {/* Password */}
       <div>
-        <label className="block text-sm font-medium text-white">Password *</label>
+        <label className="block text-sm font-medium text-white">Password <span className="text-red-500">*</span></label>
         <div className="relative mt-1">
           <input
             type={showPassword ? "text" : "password"}

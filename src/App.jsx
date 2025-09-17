@@ -4,7 +4,8 @@ import Login from './pages/Login'
 import Products from './pages/Products'
 import Blogs from './pages/Blogs'
 import ProtectedRoute from './components/ProtectedRoute'
-import Header from './components/Header'
+import Header from './Components/Header'
+import Persons from './pages/Persons'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -37,6 +38,15 @@ function App() {
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Products />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/persons" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <Persons />
               </ProtectedRoute>
             } 
           />

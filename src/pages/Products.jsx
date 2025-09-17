@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import ProductForm from '../components/ProductForm'
-import ProductList from '../components/ProductList'
-import Header from '../components/Header'
+import ProductForm from '../Components/ProductForm'
+import ProductList from '../Components/ProductList'
+import Header from '../Components/Header'
 
 function Products() {
   const [products, setProducts] = useState([])
@@ -51,7 +51,7 @@ function Products() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-              Products Management
+              Our Products
             </h1>
             <p className="text-gray-600">Manage your product catalog with ease</p>
           </div>

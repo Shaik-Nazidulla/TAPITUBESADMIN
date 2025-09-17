@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import BlogForm from '../components/BlogForm'
-import BlogList from '../components/BlogList'
-import Header from '../components/Header'
+import BlogForm from '../Components/BlogForm'
+import BlogList from '../Components/BlogList'
+import Header from '../Components/Header'
 
 function Blogs() {
   const [blogs, setBlogs] = useState([])
