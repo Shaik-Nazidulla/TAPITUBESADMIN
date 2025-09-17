@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ProductForm from '../components/ProductForm'
 import ProductList from '../components/ProductList'
+import Header from '../components/Header'
 
 function Products() {
   const [products, setProducts] = useState([])
@@ -42,6 +43,8 @@ function Products() {
   }
 
   return (
+    <>
+    <Header/>
     <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         {/* Header with animated gradient */}
@@ -83,6 +86,7 @@ function Products() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

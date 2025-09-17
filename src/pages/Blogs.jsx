@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import BlogForm from '../components/BlogForm'
 import BlogList from '../components/BlogList'
+import Header from '../components/Header'
 
 function Blogs() {
   const [blogs, setBlogs] = useState([])
@@ -42,6 +43,8 @@ function Blogs() {
   }
 
   return (
+    <>    
+    <Header/>
     <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
       <div className="px-4 py-6 sm:px-0">
         {/* Header with animated gradient */}
@@ -83,6 +86,7 @@ function Blogs() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

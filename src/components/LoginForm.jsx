@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLogin } from "../redux/authSlice"; 
@@ -8,7 +8,7 @@ function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // <-- initialize
 
-  const { loading, error, token } = useSelector((state) => state.auth);
+  const { loading, error } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -22,7 +22,7 @@ function LoginForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -31,15 +31,11 @@ function LoginForm() {
     }
 
     setLocalError("");
-    dispatch(adminLogin(formData));
-  };
-
-  // ✅ Redirect after successful login
-  useEffect(() => {
-    if (token) {
-      navigate("/products"); // <-- redirect to products page
+    const result= await dispatch(adminLogin(formData));
+    if (adminLogin.fulfilled.match(result)){
+      navigate('/products');
     }
-  }, [token, navigate]);
+  };
 
   return (
     <form
