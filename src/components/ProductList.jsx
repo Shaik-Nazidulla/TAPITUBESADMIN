@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 function ProductList({ products, onEdit, onDelete }) {
-  const [expandedSection, setExpandedSection] = useState({}); // { [productId]: "description" | "benefits" | "applications" }
+  const [expandedSection, setExpandedSection] = useState({});
+  const [currentMainImages, setCurrentMainImages] = useState({}); // { [productId]: "description" | "benefits" | "applications" }
 
   if (products.length === 0) {
     return (
@@ -38,21 +39,19 @@ function ProductList({ products, onEdit, onDelete }) {
   };
 
   const handleImageClick = (productId, imgSrc) => {
-    products = products.map((p) =>
-      p.id === productId ? { ...p, currentMain: imgSrc } : p
-    );
-  };
+  setCurrentMainImages((prev) => ({
+    ...prev,
+    [productId]: imgSrc,
+  }));
+};
 
   return (
     <div className="space-y-6">
       {products.map((product) => {
         const mainImage =
-          product.currentMain ||
-          (product.mainImage
-            ? typeof product.mainImage === "string"
-              ? product.mainImage
-              : URL.createObjectURL(product.mainImage)
-            : null);
+           product.mainImage instanceof File
+            ? URL.createObjectURL(product.mainImage)
+            : product.mainImage.url; 
 
         const activeSection =
           expandedSection[product.id] || "description"; // default = description
@@ -96,11 +95,9 @@ function ProductList({ products, onEdit, onDelete }) {
                 {/* Extra Images */}
                 {product.extraImages?.length > 0 && (
                   <div className="flex flex-wrap justify-center gap-2">
-                    {product.extraImages.map((img, idx) => {
+                    {product.extraImages?.map((img, idx) => {
                       const imgSrc =
-                        typeof img === "string"
-                          ? img
-                          : URL.createObjectURL(img);
+                        img instanceof File ? URL.createObjectURL(img) : img.url || img;
                       return (
                         <img
                           key={idx}
@@ -169,7 +166,7 @@ function ProductList({ products, onEdit, onDelete }) {
                     <ul className="list-disc list-inside space-y-1">
                       {product.benefits?.map((b, idx) => (
                         <li key={idx}>
-                          <span className="font-medium">{b.title}:</span>{" "}
+                          <span className="font-medium">{b.point}:</span>{" "}
                           {b.description}
                         </li>
                       ))}
@@ -180,7 +177,7 @@ function ProductList({ products, onEdit, onDelete }) {
                     <ul className="list-disc list-inside space-y-1">
                       {product.applications?.map((a, idx) => (
                         <li key={idx}>
-                          <span className="font-medium">{a.title}:</span>{" "}
+                          <span className="font-medium">{a.point}:</span>{" "}
                           {a.description}
                         </li>
                       ))}

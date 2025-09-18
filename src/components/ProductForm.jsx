@@ -4,8 +4,8 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    benefits: [{ title: "", description: "" }],
-    applications: [{ title: "", description: "" }],
+    benefits: [{ point: "", description: "" }],
+    applications: [{ point: "", description: "" }],
     mainImage: null,
     extraImages: [],
   });
@@ -16,10 +16,10 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
         ...initialData,
         benefits: initialData.benefits?.length
           ? initialData.benefits
-          : [{ title: "", description: "" }],
+          : [{ point: "", description: "" }],
         applications: initialData.applications?.length
           ? initialData.applications
-          : [{ title: "", description: "" }],
+          : [{ point: "", description: "" }],
         mainImage: initialData.mainImage || null,
         extraImages: initialData.extraImages || [],
       });
@@ -51,7 +51,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
   const addField = (section) => {
     setFormData({
       ...formData,
-      [section]: [...formData[section], { title: "", description: "" }],
+      [section]: [...formData[section], { point: "", description: "" }],
     });
   };
 
@@ -126,10 +126,10 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             <div key={index} className="flex gap-2 mt-2">
               <input
                 type="text"
-                placeholder="Benefit title"
-                value={b.title}
+                placeholder="Benefit point"
+                value={b.point}
                 onChange={(e) =>
-                  handleDynamicChange("benefits", index, "title", e.target.value)
+                  handleDynamicChange("benefits", index, "point", e.target.value)
                 }
                 className="flex-1 px-3 py-2 border rounded-md"
               />
@@ -174,13 +174,13 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             <div key={index} className="flex gap-2 mt-2">
               <input
                 type="text"
-                placeholder="Application title"
-                value={a.title}
+                placeholder="Application point"
+                value={a.point}
                 onChange={(e) =>
                   handleDynamicChange(
                     "applications",
                     index,
-                    "title",
+                    "point",
                     e.target.value
                   )
                 }

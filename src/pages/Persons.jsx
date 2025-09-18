@@ -1,44 +1,72 @@
-import React, { useState } from "react";
+// src/pages/Persons.jsx
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Header from "../Components/Header";
 import PersonForm from "../Components/PersonForm";
 import PersonList from "../Components/PersonList";
-import Header from "../Components/Header";
+import {
+  fetchTeamMembers,
+  createTeamMember,
+  updateTeamMember,
+  clearPersonAdminState,
+  selectTeamMembers,
+  selectLoadingTeam,
+  selectTeamError,
+  selectCreating,
+  selectCreateError,
+  selectUpdating,
+  selectUpdateError,
+  selectNewMember,
+  selectUpdatedMember,
+} from "../redux/personAdminSlice";
 
 function Persons() {
-  const [persons, setPersons] = useState([]);
+  const dispatch = useDispatch();
+  const persons = useSelector(selectTeamMembers);
+  const loadingTeam = useSelector(selectLoadingTeam);
+  const teamError = useSelector(selectTeamError);
+
+  const creating = useSelector(selectCreating);
+  const createError = useSelector(selectCreateError);
+  const newMember = useSelector(selectNewMember);
+
+  const updating = useSelector(selectUpdating);
+  const updateError = useSelector(selectUpdateError);
+  const updatedMember = useSelector(selectUpdatedMember);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingPerson, setEditingPerson] = useState(null);
 
-  // Add new person
+  // Fetch list on mount
+  useEffect(() => {
+    dispatch(fetchTeamMembers());
+  }, [dispatch]);
+
+  // Close form and clear slice state when a create/update completes
+  useEffect(() => {
+    if (newMember || updatedMember) {
+      setIsFormOpen(false);
+      setEditingPerson(null);
+      dispatch(clearPersonAdminState());
+    }
+  }, [newMember, updatedMember, dispatch]);
+
   const handleAddPerson = (personData) => {
-    const newPerson = {
-      id: Date.now(),
-      ...personData,
-      createdAt: new Date().toLocaleDateString(),
-    };
-    setPersons([...persons, newPerson]);
-    setIsFormOpen(false);
+    const formData = new FormData();
+    formData.append("name", personData.name);
+    formData.append("designation", personData.designation);
+    formData.append("description", personData.description);
+    if (personData.image) formData.append("image", personData.image);
+    dispatch(createTeamMember(formData));
   };
 
-  // Edit existing person
   const handleEditPerson = (personData) => {
-    setPersons(
-      persons.map((person) =>
-        person.id === editingPerson.id
-          ? {
-              ...personData,
-              id: editingPerson.id,
-              createdAt: editingPerson.createdAt,
-            }
-          : person
-      )
-    );
-    setEditingPerson(null);
-    setIsFormOpen(false);
-  };
-
-  // Delete person
-  const handleDeletePerson = (id) => {
-    setPersons(persons.filter((person) => person.id !== id));
+    const formData = new FormData();
+    formData.append("name", personData.name);
+    formData.append("designation", personData.designation);
+    formData.append("description", personData.description);
+    if (personData.image) formData.append("image", personData.image);
+    dispatch(updateTeamMember({ personId: editingPerson._id, formData }));
   };
 
   const openEditForm = (person) => {
@@ -49,6 +77,7 @@ function Persons() {
   const closeForm = () => {
     setIsFormOpen(false);
     setEditingPerson(null);
+    dispatch(clearPersonAdminState());
   };
 
   return (
@@ -85,9 +114,17 @@ function Persons() {
             </button>
           </div>
 
+          {/* Team Loading/Error */}
+          {loadingTeam && <p>Loading team members…</p>}
+          {teamError && <p className="text-red-500">{teamError}</p>}
+
           {/* Person Form */}
           {isFormOpen && (
             <div className="mb-8 transform transition-all duration-300 ease-in-out">
+              {(creating || updating) && <p>Submitting…</p>}
+              {(createError || updateError) && (
+                <p className="text-red-500">{createError || updateError}</p>
+              )}
               <PersonForm
                 onSubmit={editingPerson ? handleEditPerson : handleAddPerson}
                 onCancel={closeForm}
@@ -102,7 +139,9 @@ function Persons() {
             <PersonList
               persons={persons}
               onEdit={openEditForm}
-              onDelete={handleDeletePerson}
+              onDelete={(id) => {
+                // Optionally implement deleteTeamMember thunk
+              }}
             />
           </div>
         </div>
