@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../redux/authSlice"; // make sure you have a logout action
-import Logo from "../assets/Logo.png"; // <-- your company logo path
+import { logout } from "../redux/authSlice"; 
+import Logo from "../assets/Logo.png";
 
 function Header() {
   const location = useLocation();

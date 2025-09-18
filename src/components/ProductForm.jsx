@@ -4,8 +4,8 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    benefits: "",
-    applications: "",
+    benefits: [{ title: "", description: "" }],
+    applications: [{ title: "", description: "" }],
     mainImage: null,
     extraImages: [],
   });
@@ -14,6 +14,12 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
     if (initialData) {
       setFormData({
         ...initialData,
+        benefits: initialData.benefits?.length
+          ? initialData.benefits
+          : [{ title: "", description: "" }],
+        applications: initialData.applications?.length
+          ? initialData.applications
+          : [{ title: "", description: "" }],
         mainImage: initialData.mainImage || null,
         extraImages: initialData.extraImages || [],
       });
@@ -26,11 +32,39 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
       if (name === "mainImage") {
         setFormData({ ...formData, mainImage: files[0] });
       } else if (name === "extraImages") {
-        setFormData({ ...formData, extraImages: Array.from(files) });
+        setFormData({
+          ...formData,
+          extraImages: [...formData.extraImages, ...Array.from(files)],
+        });
       }
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  const handleDynamicChange = (section, index, field, value) => {
+    const updated = [...formData[section]];
+    updated[index][field] = value;
+    setFormData({ ...formData, [section]: updated });
+  };
+
+  const addField = (section) => {
+    setFormData({
+      ...formData,
+      [section]: [...formData[section], { title: "", description: "" }],
+    });
+  };
+
+  const removeField = (section, index) => {
+    const updated = [...formData[section]];
+    updated.splice(index, 1);
+    setFormData({ ...formData, [section]: updated });
+  };
+
+  const removeExtraImage = (index) => {
+    const updated = [...formData.extraImages];
+    updated.splice(index, 1);
+    setFormData({ ...formData, extraImages: updated });
   };
 
   const handleSubmit = (e) => {
@@ -85,40 +119,103 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
 
         {/* Benefits */}
         <div>
-          <label
-            htmlFor="benefits"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label className="block text-sm font-medium text-gray-700">
             Benefits
           </label>
-          <textarea
-            id="benefits"
-            name="benefits"
-            rows={3}
-            value={formData.benefits}
-            onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter product benefits"
-          />
+          {formData.benefits.map((b, index) => (
+            <div key={index} className="flex gap-2 mt-2">
+              <input
+                type="text"
+                placeholder="Benefit title"
+                value={b.title}
+                onChange={(e) =>
+                  handleDynamicChange("benefits", index, "title", e.target.value)
+                }
+                className="flex-1 px-3 py-2 border rounded-md"
+              />
+              <input
+                type="text"
+                placeholder="Benefit description"
+                value={b.description}
+                onChange={(e) =>
+                  handleDynamicChange(
+                    "benefits",
+                    index,
+                    "description",
+                    e.target.value
+                  )
+                }
+                className="flex-1 px-3 py-2 border rounded-md"
+              />
+              <button
+                type="button"
+                onClick={() => removeField("benefits", index)}
+                className="text-red-500"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addField("benefits")}
+            className="mt-2 text-sm text-blue-600"
+          >
+            + Add Benefit
+          </button>
         </div>
 
         {/* Applications */}
         <div>
-          <label
-            htmlFor="applications"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label className="block text-sm font-medium text-gray-700">
             Applications
           </label>
-          <textarea
-            id="applications"
-            name="applications"
-            rows={3}
-            value={formData.applications}
-            onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter product applications"
-          />
+          {formData.applications.map((a, index) => (
+            <div key={index} className="flex gap-2 mt-2">
+              <input
+                type="text"
+                placeholder="Application title"
+                value={a.title}
+                onChange={(e) =>
+                  handleDynamicChange(
+                    "applications",
+                    index,
+                    "title",
+                    e.target.value
+                  )
+                }
+                className="flex-1 px-3 py-2 border rounded-md"
+              />
+              <input
+                type="text"
+                placeholder="Application description"
+                value={a.description}
+                onChange={(e) =>
+                  handleDynamicChange(
+                    "applications",
+                    index,
+                    "description",
+                    e.target.value
+                  )
+                }
+                className="flex-1 px-3 py-2 border rounded-md"
+              />
+              <button
+                type="button"
+                onClick={() => removeField("applications", index)}
+                className="text-red-500"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addField("applications")}
+            className="mt-2 text-sm text-blue-600"
+          >
+            + Add Application
+          </button>
         </div>
 
         {/* Main Image */}
@@ -135,8 +232,13 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             name="mainImage"
             accept="image/*"
             onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
           />
+          {formData.mainImage && (
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.mainImage.name}
+            </p>
+          )}
         </div>
 
         {/* Extra Images */}
@@ -154,8 +256,24 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             accept="image/*"
             multiple
             onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
           />
+          {formData.extraImages.length > 0 && (
+            <ul className="mt-2 space-y-1 text-sm text-gray-600">
+              {formData.extraImages.map((img, idx) => (
+                <li key={idx} className="flex justify-between items-center">
+                  {img.name}
+                  <button
+                    type="button"
+                    onClick={() => removeExtraImage(idx)}
+                    className="text-red-500 text-xs"
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Buttons */}
@@ -163,13 +281,13 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
           >
             {isEditing ? "Update Product" : "Add Product"}
           </button>
