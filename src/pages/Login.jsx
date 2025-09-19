@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LoginForm from "../Components/LoginForm";
-import SignUpForm from "../Components/SignUpForm"; 
+import LoginForm from "../components/LoginForm";
+import SignUpForm from "../components/SignUpForm"; 
 import Logo from "../assets/Logo.png";
 import BgImage from "../assets/BgImg.png";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Header from '../Components/Header';
+import Header from '../components/Header';
 import {
   fetchAllBlogs,
   createBlogAsync,

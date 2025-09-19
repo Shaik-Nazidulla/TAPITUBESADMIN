@@ -1,9 +1,9 @@
 // src/pages/Persons.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Header from "../Components/Header";
-import PersonForm from "../Components/PersonForm";
-import PersonList from "../Components/PersonList";
+import Header from "../components/Header";
+import PersonForm from "../components/PersonForm";
+import PersonList from "../components/PersonList";
 import {
   fetchTeamMembers,
   createTeamMember,
