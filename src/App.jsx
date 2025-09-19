@@ -4,7 +4,7 @@ import Login from './pages/Login'
 import Products from './pages/Products'
 import Blogs from './pages/Blogs'
 import ProtectedRoute from './components/ProtectedRoute'
-import Header from './Components/Header'
+import Header from './components/Header'
 import Persons from './pages/Persons'
 
 function App() {

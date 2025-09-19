@@ -1,9 +1,9 @@
 // src/pages/Products.jsx
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Header from '../Components/Header';
-import ProductForm from '../Components/ProductForm';
-import ProductList from '../Components/ProductList';
+import Header from '../components/Header';
+import ProductForm from '../components/ProductForm';
+import ProductList from '../components/ProductList';
 import {
   fetchProducts,
   createProduct,
