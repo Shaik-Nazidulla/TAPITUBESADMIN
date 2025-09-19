@@ -22,7 +22,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200/50">
+    <header className="bg-black/70 backdrop-blur-lg shadow-lg border-b border-gray-200/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Left: Logo */}
@@ -37,7 +37,7 @@ function Header() {
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
                 isActive("/products")
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
+                  : "text-[#FFFFFF] hover:text-gray-900 hover:bg-gray-100/50"
               }`}
             >
               <span>Products</span>
@@ -48,7 +48,7 @@ function Header() {
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
                 isActive("/persons")
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
+                  : "text-[#FFFFFF] hover:text-gray-900 hover:bg-gray-100/50"
               }`}
             >
               <span>Persons</span>
@@ -58,8 +58,8 @@ function Header() {
               to="/blogs"
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
                 isActive("/blogs")
-                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transform scale-105"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105"
+                  : "text-[#FFFFFF] hover:text-gray-900 hover:bg-gray-100/50"
               }`}
             >
               <span>Blogs</span>
@@ -70,9 +70,9 @@ function Header() {
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2"
+              className=" bg-[#405FFC] hover:to-blue-600 hover:cursor-pointer text-[#ffffff] px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2"
             >
-              <span>{user?.email || "User"}</span>
+              <span>{user?.email || "Admin"}</span>
               <svg
                 className={`w-4 h-4 transform transition-transform ${
                   dropdownOpen ? "rotate-180" : ""
@@ -91,12 +91,12 @@ function Header() {
             </button>
 
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg py-2 z-50">
+              <div className="absolute  right-0 mt-2 w-20 bg-[#405FFC] shadow-lg rounded-lg py-2 z-50">
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  className="w-full text-left px-4 py-2 text-sm text-[#ffffff] hover:cursor-pointer"
                 >
-                  Logout
+                  Log out
                 </button>
               </div>
             )}
