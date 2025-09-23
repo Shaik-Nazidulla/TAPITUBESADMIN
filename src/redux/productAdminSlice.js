@@ -67,6 +67,27 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
+// DELETE PRODUCT
+export const deleteProduct = createAsyncThunk(
+  'admin/deleteProduct',
+  async (productId, thunkAPI) => {
+    const token = thunkAPI.getState().auth.token;
+    try {
+      const response = await fetch(`${API_URL}/product/delete/${productId}`, {
+        method: 'DELETE',
+        headers: { ...authHeader(token) },
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || `HTTP ${response.status}`);
+      }
+      return productId;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
 const initialState = {
   products: [],
   loadingProducts: false,
@@ -135,6 +156,17 @@ const productAdminSlice = createSlice({
       .addCase(updateProduct.rejected, (state, action) => {
         state.updating = false;
         state.updateError = action.payload;
+      })
+      // In extraReducers, add:
+      .addCase(deleteProduct.pending, (state) => {
+        state.productError = null;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        // Remove deleted product from state
+        state.products = state.products.filter(p => p._id !== action.payload);
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.productError = action.payload;
       });
   },
 });

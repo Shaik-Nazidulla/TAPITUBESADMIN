@@ -54,11 +54,11 @@ function ProductList({ products, onEdit, onDelete }) {
             : product.mainImage.url; 
 
         const activeSection =
-          expandedSection[product.id] || "description"; // default = description
+          expandedSection[product._id] || "description"; // default = description
 
         return (
           <div
-            key={product.id}
+            key={product._id}
             className="bg-white rounded-2xl shadow-md border border-gray-200 hover:shadow-xl transition-all duration-300 overflow-hidden"
           >
             <div className="grid md:grid-cols-2 gap-6">
@@ -106,7 +106,7 @@ function ProductList({ products, onEdit, onDelete }) {
                           className={`h-12 w-12 object-cover rounded-md border cursor-pointer hover:ring-2 hover:ring-indigo-400 ${
                             imgSrc === mainImage ? "ring-2 ring-indigo-500" : ""
                           }`}
-                          onClick={() => handleImageClick(product.id, imgSrc)}
+                          onClick={() => handleImageClick(product._id, imgSrc)}
                         />
                       );
                     })}
@@ -125,7 +125,7 @@ function ProductList({ products, onEdit, onDelete }) {
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                     onClick={() =>
-                      setExpandedSection({ ...expandedSection, [product.id]: "description" })
+                      setExpandedSection({ ...expandedSection, [product._id]: "description" })
                     }
                   >
                     Description
@@ -137,7 +137,7 @@ function ProductList({ products, onEdit, onDelete }) {
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                     onClick={() =>
-                      setExpandedSection({ ...expandedSection, [product.id]: "benefits" })
+                      setExpandedSection({ ...expandedSection, [product._id]: "benefits" })
                     }
                   >
                     Benefits
@@ -149,7 +149,7 @@ function ProductList({ products, onEdit, onDelete }) {
                         : "text-gray-500 hover:text-gray-700"
                     }`}
                     onClick={() =>
-                      setExpandedSection({ ...expandedSection, [product.id]: "applications" })
+                      setExpandedSection({ ...expandedSection, [product._id]: "applications" })
                     }
                   >
                     Applications
@@ -198,7 +198,7 @@ function ProductList({ products, onEdit, onDelete }) {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(product.id, product.name)}
+                      onClick={() => handleDelete(product._id, product.name)}
                       className="px-3 py-1 text-sm font-semibold text-red-600 hover:text-red-900 transition-colors duration-200"
                     >
                       Delete

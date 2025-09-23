@@ -18,6 +18,7 @@ import {
   selectUpdateError,
   selectNewMember,
   selectUpdatedMember,
+  deletePerson,
 } from "../redux/personAdminSlice";
 
 function Persons() {
@@ -51,22 +52,24 @@ function Persons() {
     }
   }, [newMember, updatedMember, dispatch]);
 
-  const handleAddPerson = (personData) => {
+  const handleAddPerson = async (personData) => {
     const formData = new FormData();
     formData.append("name", personData.name);
     formData.append("designation", personData.designation);
     formData.append("description", personData.description);
     if (personData.image) formData.append("image", personData.image);
     dispatch(createTeamMember(formData));
+    await dispatch(fetchTeamMembers());
   };
 
-  const handleEditPerson = (personData) => {
+  const handleEditPerson = async (personData) => {
     const formData = new FormData();
     formData.append("name", personData.name);
     formData.append("designation", personData.designation);
     formData.append("description", personData.description);
     if (personData.image) formData.append("image", personData.image);
     dispatch(updateTeamMember({ personId: editingPerson._id, formData }));
+    await dispatch(fetchTeamMembers());
   };
 
   const openEditForm = (person) => {
@@ -78,6 +81,13 @@ function Persons() {
     setIsFormOpen(false);
     setEditingPerson(null);
     dispatch(clearPersonAdminState());
+  };
+
+  const handleDelete = (personId) => {
+    if (window.confirm("Are you sure you want to delete this person?")) {
+      dispatch(deletePerson(personId));
+      dispatch(fetchTeamMembers())
+    }
   };
 
   return (
@@ -139,9 +149,7 @@ function Persons() {
             <PersonList
               persons={persons}
               onEdit={openEditForm}
-              onDelete={(id) => {
-                // Optionally implement deleteTeamMember thunk
-              }}
+              onDelete={handleDelete}
             />
           </div>
         </div>

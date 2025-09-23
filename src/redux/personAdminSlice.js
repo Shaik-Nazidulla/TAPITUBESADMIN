@@ -70,6 +70,27 @@ export const updateTeamMember = createAsyncThunk(
   }
 );
 
+// DELETE PERSON
+export const deletePerson = createAsyncThunk(
+  'admin/deletePerson',
+  async (personId, thunkAPI) => {
+    const token = thunkAPI.getState().auth.token;
+    try {
+      const response = await fetch(`${API_URL}/team/delete/${personId}`, {
+        method: 'DELETE',
+        headers: authHeader(token),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || `HTTP ${response.status}`);
+      }
+      return personId;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err.message);
+    }
+  }
+);
+
 const initialState = {
   teamMembers: [],
   loadingTeam: false,
@@ -138,6 +159,17 @@ const personAdminSlice = createSlice({
       .addCase(updateTeamMember.rejected, (state, action) => {
         state.updating = false;
         state.updateError = action.payload;
+      })
+      // In extraReducers, add:
+      .addCase(deletePerson.pending, (state) => {
+        state.teamError = null;
+      })
+      .addCase(deletePerson.fulfilled, (state, action) => {
+        // Remove deleted person from state
+        state.teamMembers = state.teamMembers.filter(member => member._id !== action.payload);
+      })
+      .addCase(deletePerson.rejected, (state, action) => {
+        state.teamError = action.payload;
       });
   },
 });

@@ -18,6 +18,7 @@ import {
   selectUpdateProductError,
   selectNewProduct,
   selectUpdatedProduct,
+  deleteProduct,
 } from '../redux/productAdminSlice';
 
 function Products() {
@@ -78,8 +79,17 @@ function Products() {
 
     if (editingProduct && editingProduct._id) {
       dispatch(updateProduct({ productId: editingProduct._id, formData }));
+      dispatch(fetchProducts());
     } else {
       dispatch(createProduct(formData));
+      dispatch(fetchProducts())
+    }
+  };
+
+  const handleDelete = (productId) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      dispatch(deleteProduct(productId));
+      dispatch(fetchProducts())
     }
   };
 
@@ -133,9 +143,7 @@ function Products() {
             <ProductList
               products={products}
               onEdit={openEditForm}
-              onDelete={(id) => {
-                // Optionally dispatch a deleteProduct thunk here
-              }}
+              onDelete={handleDelete}
             />
           </div>
         </div>

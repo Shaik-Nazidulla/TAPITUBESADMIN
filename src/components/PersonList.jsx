@@ -39,7 +39,7 @@ function PersonList({ persons, onEdit, onDelete }) {
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {persons.map((person) => (
         <div
-          key={person.id}
+          key={person._id}
           className="bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl border border-gray-200/50 overflow-hidden hover:shadow-xl transition-shadow duration-300"
         >
           {/* Person Image */}
@@ -79,7 +79,7 @@ function PersonList({ persons, onEdit, onDelete }) {
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(person.id, person.name)}
+                onClick={() => handleDelete(person._id, person.name)}
                 className="px-4 py-2 text-sm font-semibold text-red-600 hover:text-red-900 transition-colors duration-200"
               >
                 Delete

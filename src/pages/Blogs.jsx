@@ -94,6 +94,7 @@ export default function Blogs() {
         emailEditorRef.current.editor.loadDesign(blog.blogContent.design);
       }
     }, 500);
+    dispatch(fetchAllBlogs());
   };
 
   // Table Setup - Fixed getPaginationRowModel
@@ -211,12 +212,14 @@ export default function Blogs() {
           id: editingBlog._id || editingBlog.id, 
           updates: formData 
         })).unwrap();
+        await dispatch(fetchAllBlogs());
         console.log('Update result:', result);
         toast.success('Blog updated successfully');
       } else {
         console.log('Creating new blog');
         // Create blog
         const result = await dispatch(createBlogAsync({ formData })).unwrap();
+        await dispatch(fetchAllBlogs());
         console.log('Create result:', result);
         toast.success('Blog created successfully');
       }
@@ -262,6 +265,7 @@ export default function Blogs() {
     if (emailEditorRef.current) {
       emailEditorRef.current.editor.loadDesign({});
     }
+    dispatch(fetchAllBlogs());
   };
 
   return (
