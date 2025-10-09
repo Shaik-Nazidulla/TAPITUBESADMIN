@@ -1,5 +1,5 @@
 // utils/api.js    (new api.js)
-const API_BASE_URL = "https://tapi-tubes-server.onrender.com";
+const API_BASE_URL = "https://api.tapitubes.com";
 
 // Enhanced API request function with comprehensive error handling
 export const apiRequest = async (endpoint, options = {}) => {

@@ -1,7 +1,7 @@
 // src/features/admin/productAdminSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const API_URL = "https://tapi-tubes-server.onrender.com";
+const API_URL = "https://api.tapitubes.com";
 
 // Helper to get auth header
 const authHeader = (token) => (token ? { Authorization: `Bearer ${token}` } : {});
