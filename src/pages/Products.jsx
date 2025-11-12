@@ -28,11 +28,9 @@ function Products() {
   const products = useSelector(selectProductsAdmin);
   const loadingProducts = useSelector(selectLoadingProducts);
   const productError = useSelector(selectProductError);
-
   const creating = useSelector(selectCreatingProduct);
   const createError = useSelector(selectCreateProductError);
   const newProduct = useSelector(selectNewProduct);
-
   const updating = useSelector(selectUpdatingProduct);
   const updateError = useSelector(selectUpdateProductError);
   const updatedProduct = useSelector(selectUpdatedProduct);
@@ -68,13 +66,21 @@ function Products() {
 
   const handleSubmit = (productData) => {
     const formData = new FormData();
+
     formData.append('name', productData.name);
     formData.append('description', productData.description);
     formData.append('benefits', JSON.stringify(productData.benefits));
     formData.append('applications', JSON.stringify(productData.applications));
+
     if (productData.mainImage) formData.append('mainImage', productData.mainImage);
+
     if (productData.extraImages) {
       productData.extraImages.forEach((file) => formData.append('extraImages', file));
+    }
+
+    // Add size charts to FormData
+    if (productData.sizeCharts) {
+      productData.sizeCharts.forEach((file) => formData.append('sizeCharts', file));
     }
 
     if (editingProduct && editingProduct._id) {
@@ -82,71 +88,65 @@ function Products() {
       dispatch(fetchProducts());
     } else {
       dispatch(createProduct(formData));
-      dispatch(fetchProducts())
+      dispatch(fetchProducts());
     }
   };
 
   const handleDelete = (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       dispatch(deleteProduct(productId));
-      dispatch(fetchProducts())
+      dispatch(fetchProducts());
     }
   };
 
   return (
     <>
       <Header />
-      <div className="max-w-7xl mx-auto py-8 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Products</h1>
+          <p className="text-gray-600">Manage your product catalog with ease</p>
+          <button
+            onClick={() => setIsFormOpen(true)}
+            className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
+            Add New Product
+          </button>
+        </div>
 
-          {/* Header */}
-          <div className="flex justify-between items-center mb-8">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                Our Products
-              </h1>
-              <p className="text-gray-600">Manage your product catalog with ease</p>
-            </div>
-            <button
-              onClick={() => setIsFormOpen(true)}
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
-            >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-              </svg>
-              <span>Add New Product</span>
-            </button>
+        {loadingProducts && <p className="text-center">Loading products…</p>}
+        {productError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {productError}
           </div>
+        )}
 
-          {/* Loading & Errors */}
-          {loadingProducts && <p>Loading products…</p>}
-          {productError && <p className="text-red-500">{productError}</p>}
-
-          {/* Product Form */}
-          {isFormOpen && (
-            <div className="mb-8 transform transition-all duration-300 ease-in-out">
-              {(creating || updating) && <p>Submitting…</p>}
-              {(createError || updateError) && (
-                <p className="text-red-500">{createError || updateError}</p>
-              )}
+        {/* Product Form - FIXED: Added isEditing prop */}
+        {isFormOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 overflow-y-auto">
+            <div className="bg-white rounded-lg p-6 max-w-3xl w-full m-4 max-h-[90vh] overflow-y-auto">
               <ProductForm
-                onSubmit={handleSubmit}
-                onCancel={closeForm}
                 initialData={editingProduct}
                 isEditing={!!editingProduct}
+                onSubmit={handleSubmit}
+                onCancel={closeForm}
               />
+              {(creating || updating) && <p className="mt-4 text-center">Submitting…</p>}
+              {(createError || updateError) && (
+                <div className="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                  {createError || updateError}
+                </div>
+              )}
             </div>
-          )}
-
-          {/* Product List */}
-          <div className="transform transition-all duration-300">
-            <ProductList
-              products={products}
-              onEdit={openEditForm}
-              onDelete={handleDelete}
-            />
           </div>
-        </div>
+        )}
+
+        {/* Product List */}
+        <ProductList
+          products={products}
+          onEdit={openEditForm}
+          onDelete={handleDelete}
+        />
       </div>
     </>
   );

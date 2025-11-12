@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 
+
 function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -8,7 +9,9 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
     applications: [{ point: "", description: "" }],
     mainImage: null,
     extraImages: [],
+    sizeCharts: [], // NEW: Added sizeCharts
   });
+
 
   useEffect(() => {
     if (initialData) {
@@ -22,9 +25,11 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           : [{ point: "", description: "" }],
         mainImage: initialData.mainImage || null,
         extraImages: initialData.extraImages || [],
+        sizeCharts: initialData.sizeCharts || [], // NEW: Initialize sizeCharts
       });
     }
   }, [initialData]);
+
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -36,17 +41,24 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           ...formData,
           extraImages: [...formData.extraImages, ...Array.from(files)],
         });
+      } else if (name === "sizeCharts") { // NEW: Handle sizeCharts
+        setFormData({
+          ...formData,
+          sizeCharts: [...formData.sizeCharts, ...Array.from(files)],
+        });
       }
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
+
   const handleDynamicChange = (section, index, field, value) => {
     const updated = [...formData[section]];
     updated[index][field] = value;
     setFormData({ ...formData, [section]: updated });
   };
+
 
   const addField = (section) => {
     setFormData({
@@ -55,11 +67,13 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
     });
   };
 
+
   const removeField = (section, index) => {
     const updated = [...formData[section]];
     updated.splice(index, 1);
     setFormData({ ...formData, [section]: updated });
   };
+
 
   const removeExtraImage = (index) => {
     const updated = [...formData.extraImages];
@@ -67,16 +81,27 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
     setFormData({ ...formData, extraImages: updated });
   };
 
+
+  // NEW: Function to remove size chart
+  const removeSizeChart = (index) => {
+    const updated = [...formData.sizeCharts];
+    updated.splice(index, 1);
+    setFormData({ ...formData, sizeCharts: updated });
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
   };
+
 
   return (
     <div className="bg-white shadow rounded-lg p-6">
       <h2 className="text-lg font-medium text-gray-900 mb-4">
         {isEditing ? "Edit Product" : "Add New Product"}
       </h2>
+
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Product Name */}
@@ -98,6 +123,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           />
         </div>
 
+
         {/* Description */}
         <div>
           <label
@@ -116,6 +142,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+
 
         {/* Benefits */}
         <div>
@@ -164,6 +191,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             + Add Benefit
           </button>
         </div>
+
 
         {/* Applications */}
         <div>
@@ -218,6 +246,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           </button>
         </div>
 
+
         {/* Main Image */}
         <div>
           <label
@@ -240,6 +269,7 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
             </p>
           )}
         </div>
+
 
         {/* Extra Images */}
         <div>
@@ -276,6 +306,43 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
           )}
         </div>
 
+
+        {/* Size Charts - NEW SECTION */}
+        <div>
+          <label
+            htmlFor="sizeCharts"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Size Charts
+          </label>
+          <input
+            type="file"
+            id="sizeCharts"
+            name="sizeCharts"
+            accept="image/*"
+            multiple
+            onChange={handleChange}
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+          />
+          {formData.sizeCharts.length > 0 && (
+            <ul className="mt-2 space-y-1 text-sm text-gray-600">
+              {formData.sizeCharts.map((chart, idx) => (
+                <li key={idx} className="flex justify-between items-center">
+                  {chart.name || `Size Chart ${idx + 1}`}
+                  <button
+                    type="button"
+                    onClick={() => removeSizeChart(idx)}
+                    className="text-red-500 text-xs"
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+
         {/* Buttons */}
         <div className="flex justify-end space-x-3 pt-4">
           <button
@@ -296,5 +363,6 @@ function ProductForm({ onSubmit, onCancel, initialData, isEditing }) {
     </div>
   );
 }
+
 
 export default ProductForm;
