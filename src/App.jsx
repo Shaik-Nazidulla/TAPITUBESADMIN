@@ -42,14 +42,14 @@ function App() {
             } 
           />
 
-          <Route 
+         {/*<Route 
             path="/persons" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
                 <Persons />
               </ProtectedRoute>
             } 
-          />
+          />*/}
           
           <Route 
             path="/blogs" 

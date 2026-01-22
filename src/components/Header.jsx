@@ -43,7 +43,7 @@ function Header() {
               <span>Products</span>
             </Link>
 
-            <Link
+           {/*<Link
               to="/persons"
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
                 isActive("/persons")
@@ -52,7 +52,7 @@ function Header() {
               }`}
             >
               <span>Persons</span>
-            </Link>
+            </Link>*/}
 
             <Link
               to="/blogs"
