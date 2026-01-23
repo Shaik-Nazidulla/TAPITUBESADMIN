@@ -4,22 +4,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice"; 
 import Logo from "../assets/Logo.png";
 
+
 function Header() {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+
   // Assuming you store user info in redux -> auth.user
   const user = useSelector((state) => state.auth.user);
 
+
   const isActive = (path) => location.pathname === path;
+
 
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem("token");
     navigate("/login", { replace: true });
   };
+
 
   return (
     <header className="bg-black/70 backdrop-blur-lg shadow-lg border-b border-gray-200/50">
@@ -29,6 +34,7 @@ function Header() {
           <div className="flex items-center space-x-3">
             <img src={Logo} alt="Company Logo" className="h-10 w-auto" />
           </div>
+
 
           {/* Center: Nav Links */}
           <nav className="flex space-x-1">
@@ -43,7 +49,8 @@ function Header() {
               <span>Products</span>
             </Link>
 
-           {/*<Link
+
+            {/* <Link
               to="/persons"
               className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
                 isActive("/persons")
@@ -53,6 +60,19 @@ function Header() {
             >
               <span>Persons</span>
             </Link>*/}
+
+
+            <Link
+              to="/about-us"
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center space-x-2 ${
+                isActive("/about-us")
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg transform scale-105"
+                  : "text-[#FFFFFF] hover:text-gray-900 hover:bg-gray-100/50"
+              }`}
+            >
+              <span>About Us</span>
+            </Link>
+
 
             <Link
               to="/blogs"
@@ -65,6 +85,7 @@ function Header() {
               <span>Blogs</span>
             </Link>
           </nav>
+
 
           {/* Right: User Info Dropdown */}
           <div className="relative">
@@ -90,6 +111,7 @@ function Header() {
               </svg>
             </button>
 
+
             {dropdownOpen && (
               <div className="absolute  right-0 mt-2 w-20 bg-[#405FFC] shadow-lg rounded-lg py-2 z-50">
                 <button
@@ -106,5 +128,6 @@ function Header() {
     </header>
   );
 }
+
 
 export default Header;

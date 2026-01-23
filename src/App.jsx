@@ -3,20 +3,25 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './pages/Login'
 import Products from './pages/Products'
 import Blogs from './pages/Blogs'
+import Persons from './pages/Persons'
+import AboutUs from './pages/AboutUs'
 import ProtectedRoute from './components/ProtectedRoute'
 import Header from './components/Header'
-import Persons from './pages/Persons'
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+
 
   const handleLogin = () => {
     setIsAuthenticated(true)
   }
 
+
   const handleLogout = () => {
     setIsAuthenticated(false)
   }
+
 
   return (
     <Router>
@@ -42,7 +47,7 @@ function App() {
             } 
           />
 
-         {/*<Route 
+          {/*<Route 
             path="/persons" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
@@ -50,6 +55,15 @@ function App() {
               </ProtectedRoute>
             } 
           />*/}
+
+          <Route 
+            path="/about-us" 
+            element={
+              <ProtectedRoute isAuthenticated={isAuthenticated}>
+                <AboutUs />
+              </ProtectedRoute>
+            } 
+          />
           
           <Route 
             path="/blogs" 
@@ -69,5 +83,6 @@ function App() {
     </Router>
   )
 }
+
 
 export default App

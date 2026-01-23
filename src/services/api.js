@@ -257,4 +257,30 @@ export const blogsAPI = {
   deleteBlog: id => apiRequest(`/blog/delete/${id}`, { method: 'DELETE' }),
 };
 
+// Add this export after the blogsAPI export in api.js
+
+export const aboutAPI = {
+  // GET - Fetch About Us data
+  getAboutUs: () => apiRequest('/about-us', { method: 'GET' }),
+
+  // POST - Create About Us
+  createAboutUs: async (aboutData) => {
+    return apiRequest('/about-us/create', {
+      method: 'POST',
+      body: JSON.stringify(aboutData),
+    });
+  },
+
+  // PUT - Update About Us
+  updateAboutUs: async (aboutData) => {
+    return apiRequest('/about-us/update', {
+      method: 'PUT',
+      body: JSON.stringify(aboutData),
+    });
+  },
+
+  // DELETE - Delete About Us
+  deleteAboutUs: () => apiRequest('/about-us/delete', { method: 'DELETE' }),
+};
+
 export default apiRequest;
